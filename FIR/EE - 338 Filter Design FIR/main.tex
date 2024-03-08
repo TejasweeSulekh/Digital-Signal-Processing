@@ -1,0 +1,160 @@
+%%---%% Physics Lab Report Version 0.6 - 1.febrúar 2023 %%---%%
+% Höfundur/Author: Hákon Örn Árnason - hakona07 AT ru.is
+% Viðhaldið af/Maintained by: Hákon Örn Árnason - hakona07 AT ru.is
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Credits to:
+% Math template by Hlynur Arnarsson
+% How to write text by Andrei Manolescu, Haraldur Auðunsson, Sigurður Ingi Erlingsson, version 050918
+% Hákon Valur Haraldsson - figures and tables additions.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass{scrartcl}
+\input{File_Setup.tex}
+% ---------- Skrá fyrir myndir ---------- 
+\graphicspath{{graphics/}{Graphics/}{./}}
+% ---------- Skrá fyrir heimildir ---------- 
+\usepackage[style=ieee]{biblatex}
+\addbibresource{bibliography.bib}
+\usepackage{mathtools}
+\begin{document}
+
+%% --- Titil síða / Title page --- %%
+\begin{titlepage}
+	\centering
+	\includegraphics[width=0.3\textwidth]{LOGO.PNG}\par\vspace{1cm} %<-- RU Logo
+	{\scshape\LARGE Indian Institute of Technology, Bombay \par} %<-- Nafn háskólans (Háskólinn í Reykjavík / Reykjavik University)
+	\vspace{1cm}
+	{\scshape\Large EE338 - Digital Signal Processing \par} %<-- Áfanga titill / Class or course title
+	\vspace{1.5cm}
+	{\huge\bfseries Digital Filter design\par} %<-- Titill Skýrslu / Title of Report
+	\vspace{2cm}
+	{\Large\itshape Name}\par %<-- Nafn nemanda / Name of student
+	\texttt{Tejaswee Sulekh}\par %<-- t-póstfang / e-mail
+	\vspace{0.7cm}
+	{\Large\itshape Roll Number}\par %<-- Nafn nemanda / Name of student
+	\texttt{20D070082}\par %<-- t-póstfang / e-mail
+	\vfill
+	Reviewed by\par %<-- (Umsjón höfðu / supervised by)
+	   Hemant Hajare, 20D070037 %<-- Nafn kennara og aðstoðarkennara í tilraun / Name of Lab Teacher and TA
+	\vfill
+
+% Bottom of the page
+	{\large Group Number-26\par}
+\end{titlepage}
+
+%% --- Titil síða endar / Title page ends --- %%
+
+\section{FIR filter transfer function using Kaiser Window}
+
+\subsection{Bandpass Filter}
+The tolerance for both the stopband and passband is given to be $\delta = 0.15$ and we get the minimum stopband attenuation as
+\begin{equation}
+    A = - 20log_{10}(\delta) = -16.4782 dB
+\end{equation}
+
+Since A $\leq$ 21 we get $\beta$ to be 0 where $\beta$ is the shape parameter of the Kaiser window.
+In order to estimate the required window length, we use the empirical formula for the lower bound on the window length.
+
+\begin{equation}
+    N_{min} = \frac{A - 8}{2.285\times2\times\Delta\omega_{T}}
+\end{equation}
+
+Here $\omega_{T}$ is the minimum transition width from the stopband to the passband.
+
+\begin{equation}
+    \Delta\omega_{T} = \frac{5kHz\times2\times\pi}{600kHz} = 0.0167\pi
+\end{equation}
+
+Substituting $\Delta\omega_{T}$ we get $N_{min} = 71$
+
+The above equation gives a loose bound on the window length when the tolerance in not very stringent. From trial and error in MATLAB and checking if the specific given for the filter that I had to design the window length after this was $\textbf{96}$. The window is a rectangular window as $\beta = 0$.\\
+
+The time domain coefficients were obtained by first generating the ideal impulse response samples for the same length as that of the window. The Kaiser window was generated using the MATLAB function and applied  on the ideal impulse response. The ideal impulse response was generated using a linear combination of impulse response of the ideal lowpass filter. The cutoff value and number of samples were given as the input argument to the ideal lowpass filter generating function.\\
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Graphics/MagPhaseBandpass.png}
+    \caption{Magnitude Phase Response}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.85\textwidth]{Graphics/BandpassFIR.png}
+    \caption{Frequnecy Response}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.85\textwidth]{Graphics/impulsepass.png}
+    \caption{Impulse Response}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.85\textwidth]{Graphics/BandpassCol.png}
+    \caption{Coefficients for discrete impulse response}
+\end{figure}
+
+\newpage
+\subsection{Bandstop}
+Since we have similar tolerance requirements as we had for bandstop. This means that we will get similar results for A and its corresponding $\beta$ value.
+
+\begin{equation}
+    A = - 20log_{10}(\delta) = -16.4782 dB
+\end{equation}
+
+Since A $\leq$ 21 we get $\beta$ to be 0 where $\beta$ is the shape parameter of the Kaiser window.
+In order to estimate the required window length, we use the empirical formula for the lower bound on the window length.
+
+\begin{equation}
+    N_{min} = \frac{A - 8}{2.285\times2\times\Delta\omega_{T}}
+\end{equation}
+
+Here $\omega_{T}$ is the minimum transition width from the stopband to the passband.
+
+\begin{equation}
+    \Delta\omega_{T} = \frac{5kHz\times2\times\pi}{425kHz} = 0.0232\pi
+\end{equation}
+
+Substituting $\Delta\omega_{T}$ we get $N_{min} = 51$
+
+The above equation gives a loose bound on the window length when the tolerance in not very stringent. From trial and error in MATLAB and checking if the specific given for the filter that I had to design the window length after this was $\textbf{67}$. The window is a rectangular window as $\beta = 0$.\\
+
+The time domain coefficients were obtained by first generating the ideal impulse response samples for the same length as that of the window. The Kaiser window was generated using the MATLAB function and applied  on the ideal impulse response. The ideal impulse response was generated using a linear combination of impulse response of the ideal lowpass filter. The cutoff value and number of samples were given as the input argument to the ideal lowpass filter generating function.\\
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = \textwidth]{Graphics/Bandstop.jpg}
+    \caption{Magnitude Phase Response}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = \textwidth]{Graphics/Freq.jpg}
+    \caption{Frequnecy Response}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Graphics/Impulsestop.jpg}
+    \caption{Impulse Response}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Graphics/Bandstopcol.jpeg}
+    \caption{Coefficients for discrete impulse response}
+\end{figure}
+\newpage
+
+\section{Peer Review Acknowledgement}
+
+To whosoever it may concern, I have succesfully reviewed this filter design report done by Hemant Hajare as a part of this course assignment for EE338, Digital Signal Processing. This includes the design process, context, calculations, simulation program and results.\\
+\\
+Thank you,\\
+Regards\\
+Tejaswee Sulekh\\
+20D070082\\
+
+
+\end{document}
